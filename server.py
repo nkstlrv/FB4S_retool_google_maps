@@ -9,6 +9,10 @@ def index():
         {"message": "Hello World"}
     )
 
+@server.route("/demo")
+def demo_page():
+    return render_template("demo_page.html")
+
 
 @server.route("/map")
 def map_page():
