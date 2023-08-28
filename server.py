@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import jsonify
+from flask import Flask, jsonify, render_template
 
 server = Flask(__name__)
 
@@ -9,6 +8,11 @@ def index():
     return jsonify(
         {"message": "Hello World"}
     )
+
+
+@server.route("/map")
+def map_page():
+    return render_template("map.html")
 
 
 if __name__=='__main__':
