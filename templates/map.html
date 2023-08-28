@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Maps API</title>
+</head>
+<body style="height: 100%; margin: 0; padding: 0;">
+    <div id="map" style="height: 100vh; width: 100%;"></div>
+​
+    <script>
+        let map;
+        let polygon;
+        let polygonCoordinates = [];
+​
+        let point1 = { lat: 43.7896, lng: -79.5233 };
+        let points = [
+            {
+                "postal": "L4K 0A4",
+                "lat": "43.7896",
+                "lng": "-79.5233"
+            },
+            {
+                "postal": "L4K 0A6",
+                "lat": "43.7901",
+                "lng": "-79.5236"
+            },
+            {
+                "postal": "L4K 1A3",
+                "lat": "43.7906",
+                "lng": "-79.5217"
+            },
+            {
+                "postal": "L4K 1A4",
+                "lat": "43.7907",
+                "lng": "-79.52"
+            },
+            {
+                "postal": "L4K 1A5",
+                "lat": "43.7895",
+                "lng": "-79.5195"
+            },
+            {
+                "postal": "L4K 1N4",
+                "lat": "43.7912",
+                "lng": "-79.5184"
+            },
+            {
+                "postal": "L4K 1N7",
+                "lat": "43.7932",
+                "lng": "-79.5172"
+            },
+            {
+                "postal": "L4K 1P3",
+                "lat": "43.7944",
+                "lng": "-79.5176"
+            },
+            {
+                "postal": "L4K 1R3",
+                "lat": "43.7924",
+                "lng": "-79.5206"
+            },
+            {
+                "postal": "L4K 1R4",
+                "lat": "43.7925",
+                "lng": "-79.521"
+            },
+            {
+                "postal": "L4K 1X2",
+                "lat": "43.7911",
+                "lng": "-79.5237"
+            },
+            {
+                "postal": "L4K 1X3",
+                "lat": "43.7908",
+                "lng": "-79.5237"
+            },
+            {
+                "postal": "L4K 2B4",
+                "lat": "43.7925",
+                "lng": "-79.5206"
+            },
+            {
+                "postal": "L4K 2B5",
+                "lat": "43.7886",
+                "lng": "-79.5194"
+            },            
+            {
+                "postal": "L4K 5C3",
+                "lat": "43.7886",
+                "lng": "-79.5299"
+            },            
+            {
+                "postal": "L4K 5Z8",
+                "lat": "43.7887",
+                "lng": "-79.5294"
+            },            
+            {
+                "postal": "L4K 5Y2",
+                "lat": "43.7896",
+                "lng": "-79.5233"
+            },
+            {
+                "postal": "M9N 2R1",
+                "lat": "43.7896",
+                "lng": "-79.5233"
+            },
+            {
+                "postal": "L4K 1R1",
+                "lat": "43.7906",
+                "lng": "-79.5217"
+            },
+            {
+                "postal": "L4K 2B6",
+                "lat": "43.7906",
+                "lng": "-79.5217"
+            },
+            {
+                "postal": "L4K 5C4",
+                "lat": "43.7906",
+                "lng": "-79.5217"
+            },
+            {
+                "postal": "L4K 1N9",
+                "lat": "43.7912",
+                "lng": "-79.5184"
+            },
+            {
+                "postal": "L4K 4H7",
+                "lat": "43.7912",
+                "lng": "-79.5184"
+            }
+        ]
+​
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: point1,
+                zoom: 15,
+            });
+​
+            // map.data.loadGeoJson(
+            //     "CanadaPostalCodePolygonsM4G.geojson",
+            // );
+​
+			const drawingManager = new google.maps.drawing.DrawingManager({
+				drawingMode: null,
+				drawingControl: true,
+				drawingControlOptions: {
+				position: google.maps.ControlPosition.TOP_CENTER,
+				drawingModes: [
+					google.maps.drawing.OverlayType.POLYGON
+				],
+			}
+​
+		});
+​
+        polygonCoordinates = [
+            {"lat": 43.7913, "lng": -79.5396},
+            {"lat": 43.7831, "lng": -79.5374},
+            {"lat": 43.7879, "lng": -79.5158},
+            {"lat": 43.7957, "lng": -79.5178},
+            {"lat": 43.7913, "lng": -79.5396}
+        ];
+​
+        const polygon = new google.maps.Polygon({
+            paths: polygonCoordinates,
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+        });
+​
+        for (p = 0; p < points.length; p++){   
+            
+            let tmp = {
+                lat: Number(points[p].lat),
+                lng: Number(points[p].lng)
+            }
+​
+            let marker = new google.maps.Marker({
+                position: tmp,
+                map: map,
+                title: points[p].postal,
+            });
+        }        
+​
+        polygon.setMap(map);
+  		drawingManager.setMap(map);
+        }
+    </script>
+​
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&libraries=drawing&&language=en"></script>
+</body>
+</html>
