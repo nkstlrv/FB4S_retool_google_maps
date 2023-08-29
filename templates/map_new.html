@@ -7,7 +7,7 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&v=weekly"
       defer
     ></script>
-    <script src="../scripts/map.js"></script> <!--Main script-->
+    <script src="{{ url_for('static', filename='map.js') }}"></script> <!--Main script-->
     <style>
      
       #map {
