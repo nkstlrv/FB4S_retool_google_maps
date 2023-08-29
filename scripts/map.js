@@ -4,18 +4,25 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
       zoom: 15,
       center: { lat: 43.7913, lng: -79.5396 },
-      mapTypeId: "terrain",
+      mapTypeId: "satellite",
     });
 
+    new google.maps.Marker({
+      position: { lat: 43.7915, lng: -79.5400 },
+      map,
+      label: "🏠",
+      title: "Hello World!",
+      color: "#FF0004"
+    });
 
-    // initial polygons coordinated
+    // initial polygon coordinated
     const initCoords = [
-      {"lat": 43.7913, "lng": -79.5396},
+            {"lat": 43.7913, "lng": -79.5396},  
             {"lat": 43.7831, "lng": -79.5374},
             {"lat": 43.7879, "lng": -79.5158},
             {"lat": 43.7957, "lng": -79.5178},
             {"lat": 43.7913, "lng": -79.5396},
-    ];
+    ];  
 
     // initial polygon
     const initPolygon = new google.maps.Polygon({
@@ -31,3 +38,7 @@ function initMap() {
   }
 
   window.initMap = initMap;
+
+  
+
+  
