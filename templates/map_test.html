@@ -6,7 +6,46 @@
 <body style="height: 100%; margin: 0; padding: 0;">
     <div id="map" style="height: 100vh; width: 100%;"></div>
     <!-- <script src="{{ url_for('static', filename='map.js') }}"></script> -->
-    <script src="../static/map.js"></script>
+	<script>
+		let map;
+		let drawingManager;
+		let polygons = [];
+		
+		function initMap() {
+		  map = new google.maps.Map(document.getElementById("map"), {
+			center: { lat: 43.7915, lng: -79.5400 },
+			zoom: 15,
+		  });
+		
+		  drawingManager = new google.maps.drawing.DrawingManager({
+			drawingMode: null,
+			drawingControl: true,
+			drawingControlOptions: {
+			  position: google.maps.ControlPosition.TOP_CENTER,
+			  drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+			},
+		  });
+		
+		  drawingManager.setMap(map);
+		
+		  // Listen for overlay complete event
+		  google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+			const polygon = event.overlay;
+			polygons.push(polygon);
+			
+			// Add delete functionality
+			google.maps.event.addListener(polygon, "rightclick", function(event) {
+			  polygon.setMap(null);
+			  const index = polygons.indexOf(polygon);
+			  if (index !== -1) {
+				polygons.splice(index, 1);
+			  }
+			});
+		  });
+		}
+		
+		window.initMap = initMap;
+		</script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&libraries=drawing&&language=en"></script>
 </body>
 </html>
