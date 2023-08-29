@@ -18,7 +18,7 @@
 		  });
 		
 		  drawingManager = new google.maps.drawing.DrawingManager({
-			drawingMode: null,
+			drawingMode: google.maps.drawing.OverlayType.POLYGON,
 			drawingControl: true,
 			drawingControlOptions: {
 			  position: google.maps.ControlPosition.TOP_CENTER,
@@ -33,15 +33,43 @@
 			const polygon = event.overlay;
 			polygons.push(polygon);
 			
-			// Add delete functionality
-			google.maps.event.addListener(polygon, "rightclick", function(event) {
-			  polygon.setMap(null);
-			  const index = polygons.indexOf(polygon);
-			  if (index !== -1) {
-				polygons.splice(index, 1);
-			  }
+			const lastVertex = getLastVertex(polygon);
+			const marker = new google.maps.Marker({
+			  position: lastVertex,
+			  map: map,
+			});
+		
+			// Add mouseover event listener for marker
+			google.maps.event.addListener(marker, "mouseover", function() {
+			  const coordinates = getPolygonCoordinates(polygon);
+			  
+			  const infowindow = new google.maps.InfoWindow({
+				content: "Polygon corners coordinates:<br>" + coordinates,
+			  });
+		
+			  infowindow.open(map, marker);
+			});
+		
+			// Add mouseout event listener for marker
+			google.maps.event.addListener(marker, "mouseout", function() {
+			  marker.infowindow.close();
 			});
 		  });
+		}
+		
+		function getPolygonCoordinates(polygon) {
+		  const paths = polygon.getPath();
+		  const coordinates = [];
+		  for (let i = 0; i < paths.getLength(); i++) {
+			const vertex = paths.getAt(i);
+			coordinates.push({ lat: vertex.lat(), lng: vertex.lng() });
+		  }
+		  return JSON.stringify(coordinates);
+		}
+		
+		function getLastVertex(polygon) {
+		  const paths = polygon.getPath();
+		  return paths.getAt(paths.getLength() - 1);
 		}
 		
 		window.initMap = initMap;
