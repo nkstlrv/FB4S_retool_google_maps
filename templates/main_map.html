@@ -152,27 +152,27 @@
             {"lat": 43.7957, "lng": -79.5178},
             {"lat": 43.7913, "lng": -79.5396}
         ];
-        // const polygon = new google.maps.Polygon({
-        //     paths: polygonCoordinates,
-        //     strokeColor: "#FF0000",
-        //     strokeOpacity: 0.8,
-        //     strokeWeight: 2,
-        //     fillColor: "#FF0000",
-        //     fillOpacity: 0.1,
-        // });
-        // for (p = 0; p < points.length; p++){   
+        const polygon = new google.maps.Polygon({
+            paths: polygonCoordinates,
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+        });
+        for (p = 0; p < points.length; p++){   
             
-        //     let tmp = {
-        //         lat: Number(points[p].lat),
-        //         lng: Number(points[p].lng)
-        //     }
-        //     let marker = new google.maps.Marker({
-        //         position: tmp,
-        //         map: map,
-        //         title: points[p].postal,
-        //     });
-        // }        
-        // polygon.setMap(map);
+            let tmp = {
+                lat: Number(points[p].lat),
+                lng: Number(points[p].lng)
+            }
+            let marker = new google.maps.Marker({
+                position: tmp,
+                map: map,
+                title: points[p].postal,
+            });
+        }        
+        polygon.setMap(map);
   		drawingManager.setMap(map);
         }
     </script>

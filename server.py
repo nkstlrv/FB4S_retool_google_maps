@@ -5,12 +5,12 @@ server = Flask(__name__)
 
 @server.route("/", methods=["GET"])
 def map():
-    return render_template("map.html")
+    return render_template("main_map.html")
 
 
-@server.route("/map_old")
+@server.route("/map_test", methods=["GET"])
 def map_old_page():
-    return render_template("map_old.html")
+    return render_template("map_test.html")
 
 
 if __name__=='__main__':
