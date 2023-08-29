@@ -3,13 +3,9 @@
   <head>
     <title>Simple Polygon</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&v=weekly"
-      defer
-    ></script>
-     <script src="{{ url_for('static', filename='map.js') }}"></script> <!--Main script -->
-    <!-- <script src="../static/map.js"></script> -->
-    <!-- <script src="../static/new_map.js"></script> -->
+    
+     <!-- <script src="{{ url_for('static', filename='map.js') }}"></script> -->
+    <script src="../static/map.js"></script>
     <style>
      
       #map {
@@ -26,6 +22,11 @@
   </head>
   <body>
     <div id="map"></div>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&v=weekly"
+      defer
+    ></script>
     
   </body>
 </html>
