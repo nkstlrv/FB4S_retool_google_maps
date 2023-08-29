@@ -14,9 +14,14 @@ def demo_page():
     return render_template("demo_page.html")
 
 
-@server.route("/map")
-def map_page():
-    return render_template("map.html")
+@server.route("/map_old")
+def map_old_page():
+    return render_template("map_old.html")
+
+
+@server.route("/map_new")
+def map_new_page():
+    return render_template("map_new.html")
 
 
 if __name__=='__main__':
