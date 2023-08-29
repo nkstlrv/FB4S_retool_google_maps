@@ -40,6 +40,17 @@
 			  map: map,
 			});
 		
+			// Add right-click event listener for polygon
+			google.maps.event.addListener(polygon, "rightclick", function() {
+			  marker.setMap(null); // Remove the marker
+			  polygon.setMap(null); // Remove the polygon
+			  
+			  const index = polygons.indexOf(polygon);
+			  if (index !== -1) {
+				polygons.splice(index, 1);
+			  }
+			});
+		
 			// Add mouseover event listener for marker
 			google.maps.event.addListener(marker, "mouseover", function() {
 			  const coordinates = getPolygonCoordinates(polygon);
