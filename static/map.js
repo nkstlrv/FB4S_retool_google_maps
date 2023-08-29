@@ -1,41 +1,39 @@
 let map;
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 15,
-      center: { lat: 43.7913, lng: -79.5396 },
-      mapTypeId: "satellite",
-    });
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 15,
+    center: { lat: 43.7913, lng: -79.5396 },
+    mapTypeId: "terrain",
+  });
 
-    new google.maps.Marker({
-      position: { lat: 43.7915, lng: -79.5400 },
-      map,
-      label: "🏠",
-      title: "Hello World!",
-      color: "#FF0004"
-    });
+  new google.maps.Marker({
+    position: { lat: 43.7915, lng: -79.5400 },
+    map,
+    label: "🏠",
+    title: "Hello World!",
+    draggable: false,
+    animation: google.maps.Animation.DROP,
+    // icon: "static/pngwing.com.png"
+  });
 
-    // initial polygon coordinated
-    const initCoords = [
-            {"lat": 43.7913, "lng": -79.5396},  
-            {"lat": 43.7831, "lng": -79.5374},
-            {"lat": 43.7879, "lng": -79.5158},
-            {"lat": 43.7957, "lng": -79.5178},
-            {"lat": 43.7913, "lng": -79.5396},
-    ];  
+  let drawingManager = new google.maps.drawing.drawingManager({
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+    },
+    polygonOptions: {
+      clickable: true,
+      draggable: false,
+      editable: true,
+      fillColor: "#ADFF2F",
+      fillOpacity: 0.5,
+    }
+  });
 
-    // initial polygon
-    const initPolygon = new google.maps.Polygon({
-      paths: initCoords,
-      strokeColor: "#FF0000",
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: "#FF0000",
-      fillOpacity: 0.35,
-    });
+  drawingManager.setMap(map);
+}
 
-    initPolygon.setMap(map);
-  }
 
   window.initMap = initMap;
 
