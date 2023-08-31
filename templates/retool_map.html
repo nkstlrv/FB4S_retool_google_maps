@@ -1,0 +1,117 @@
+<div id="map" style="height: 100vh; width: 100%"></div>
+<script>
+  let map;
+  let drawingManager;
+  let polygons = [];
+  let markers = [];
+
+  window.Retool.subscribe(function (model) {
+    for (let i = 0; i < model.postalcodes.length; i++) {
+      let marker = new google.maps.Marker({
+        position: {
+          lat: model.postalcodes[i].Latitude,
+          lng: model.postalcodes[i].Longitude,
+        },
+        title: model.postalcodes[i].Postalcode,
+      });
+      marker.setMap(map);
+    }
+  });
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 43.7915, lng: -79.54 },
+      zoom: 15,
+      mapTypeId: "terrain", // Set map type to hybrid
+    });
+
+    drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+      },
+    });
+
+    drawingManager.setMap(map);
+
+    // Listen for overlay complete event
+    google.maps.event.addListener(
+      drawingManager,
+      "overlaycomplete",
+      function (event) {
+        const polygon = event.overlay;
+        polygons.push(polygon);
+
+        let testMarker = new google.maps.Marker({
+          position: {
+            lat: 0.0,
+            lng: 0.0,
+          },
+          title: "Test",
+        });
+        testMarker.setMap(map);
+
+        window.Retool.subscribe(function (model) {
+          for (let i = 0; i < model.postalcodes.length; i++) {
+            let marker = new google.maps.Marker({
+              position: {
+                lat: model.postalcodes[i].Latitude,
+                lng: model.postalcodes[i].Longitude,
+              },
+              title: model.postalcodes[i].Postalcode,
+            });
+            marker.setMap(map);
+          }
+        });
+
+        // Update the model component with coordinates
+        const coordinates = getPolygonCoordinates(polygon);
+        window.Retool.modelUpdate({ p_coordinates: coordinates });
+
+        // Add right-click event listener for polygon
+        google.maps.event.addListener(polygon, "rightclick", function () {
+          polygon.setMap(null); // Remove the polygon
+
+          const index = polygons.indexOf(polygon);
+          if (index !== -1) {
+            polygons.splice(index, 1);
+          }
+
+          // Update the model component after removing the polygon
+          const remainingCoordinates = polygons.map((p) =>
+            getPolygonCoordinates(p)
+          );
+          window.Retool.modelUpdate({
+            p_coordinates: remainingCoordinates.join(";"),
+          });
+        });
+      }
+    );
+  }
+
+  function getPolygonCoordinates(polygon) {
+    const paths = polygon.getPath();
+    const coordinates = [];
+
+    for (let i = 0; i < paths.getLength(); i++) {
+      const vertex = paths.getAt(i);
+      coordinates.push(`${vertex.lng()} ${vertex.lat()}`);
+    }
+
+    // Close the polygon
+    const firstVertex = paths.getAt(0);
+    coordinates.push(`${firstVertex.lng()} ${firstVertex.lat()}`);
+
+    const polygonString = "POLYGON((" + coordinates.join(", ") + "))";
+    return polygonString;
+  }
+
+  window.initMap = initMap;
+</script>
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvPrksYQ5T67jJ10bOtEuroZT3kClPmHI&callback=initMap&libraries=drawing&&language=en"
+></script>
