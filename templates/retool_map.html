@@ -46,14 +46,33 @@
           }
           drawn_markers = [];
 
+          let markerGroups = {};
+
           for (let i = 0; i < model.postalcodes.length; i++) {
+            const postalCodeData = model.postalcodes[i];
+            const latLngKey = `${postalCodeData.Latitude}_${postalCodeData.Longitude}`;
+
+            if (!markerGroups[latLngKey]) {
+              markerGroups[latLngKey] = [];
+            }
+
+            markerGroups[latLngKey].push(postalCodeData.Postalcode);
+          }
+
+          // Iterate through marker groups and create markers
+          for (const latLngKey in markerGroups) {
+            const [latitude, longitude] = latLngKey.split("_").map(parseFloat);
+            const postalCodes = markerGroups[latLngKey];
+            const combinedTitle = postalCodes.join(" | ");
+
             let marker = new google.maps.Marker({
               position: {
-                lat: model.postalcodes[i].Latitude,
-                lng: model.postalcodes[i].Longitude,
+                lat: latitude,
+                lng: longitude,
               },
-              title: model.postalcodes[i].Postalcode,
+              title: combinedTitle,
             });
+
             marker.setMap(map);
             drawn_markers.push(marker);
           }
