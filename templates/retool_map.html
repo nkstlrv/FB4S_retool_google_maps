@@ -31,14 +31,7 @@
         const polygon = event.overlay;
         polygons.push(polygon);
 
-        let testMarker = new google.maps.Marker({
-          position: {
-            lat: 0.0,
-            lng: 0.0,
-          },
-          title: "Test",
-        });
-        testMarker.setMap(map);
+        
 
         window.Retool.subscribe(function (model) {
           for (let i = 0; i < drawn_markers.length; i++) {
@@ -63,7 +56,7 @@
           for (const latLngKey in markerGroups) {
             const [latitude, longitude] = latLngKey.split("_").map(parseFloat);
             const postalCodes = markerGroups[latLngKey];
-            const combinedTitle = postalCodes.join(" | ");
+            const combinedTitle = postalCodes.join(" ; ");
 
             let marker = new google.maps.Marker({
               position: {
@@ -81,6 +74,8 @@
         // Update the model component with coordinates
         const coordinates = getPolygonCoordinates(polygon);
         window.Retool.modelUpdate({ p_coordinates: coordinates });
+        window.Retool.triggerQuery("get_postalcodes");
+
 
         // Add right-click event listener for polygon
         google.maps.event.addListener(polygon, "rightclick", function () {
@@ -102,6 +97,9 @@
           );
           window.Retool.modelUpdate({
             p_coordinates: remainingCoordinates.join(";"),
+          });
+          window.Retool.modelUpdate({
+            postalcodes: [],
           });
         });
       }
