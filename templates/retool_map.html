@@ -3,20 +3,7 @@
   let map;
   let drawingManager;
   let polygons = [];
-  let markers = [];
-
-  window.Retool.subscribe(function (model) {
-    for (let i = 0; i < model.postalcodes.length; i++) {
-      let marker = new google.maps.Marker({
-        position: {
-          lat: model.postalcodes[i].Latitude,
-          lng: model.postalcodes[i].Longitude,
-        },
-        title: model.postalcodes[i].Postalcode,
-      });
-      marker.setMap(map);
-    }
-  });
+  let drawn_markers = [];
 
   function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -63,6 +50,7 @@
               title: model.postalcodes[i].Postalcode,
             });
             marker.setMap(map);
+            drawn_markers.push(marker);
           }
         });
 
@@ -78,6 +66,11 @@
           if (index !== -1) {
             polygons.splice(index, 1);
           }
+
+          for (let i = 0; i < drawn_markers.length; i++) {
+            drawn_markers[i].setMap(null);
+          }
+          drawn_markers = [];
 
           // Update the model component after removing the polygon
           const remainingCoordinates = polygons.map((p) =>
