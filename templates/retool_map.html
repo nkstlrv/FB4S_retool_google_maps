@@ -41,6 +41,11 @@
         testMarker.setMap(map);
 
         window.Retool.subscribe(function (model) {
+          for (let i = 0; i < drawn_markers.length; i++) {
+            drawn_markers[i].setMap(null);
+          }
+          drawn_markers = [];
+
           for (let i = 0; i < model.postalcodes.length; i++) {
             let marker = new google.maps.Marker({
               position: {
